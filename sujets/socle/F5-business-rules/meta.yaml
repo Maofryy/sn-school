@@ -1,0 +1,17 @@
+id: F5
+titre: Business Rules & GlideRecord
+branche: socle
+taille: 1j # 100 XP
+type: sujet # 2 pairs
+anneau: 0
+liens: [F4] # conseillé, jamais bloquant
+scope: x_1606601_f5 # à aligner sur le préfixe vendeur de la PDI qui construit le kit
+
+objectifs:
+  - choisir le bon type de Business Rule (before / after / async) et sa condition de déclenchement
+  - lire et écrire avec GlideRecord, agréger avec GlideAggregate
+  - refuser une opération proprement (setAbortAction + message)
+  - sortir la logique métier dans un Script Include testable
+  - éviter current.update(), les sys_id en dur et les requêtes dans une boucle
+
+exigences: [E1, E2, E3, E4, E5]

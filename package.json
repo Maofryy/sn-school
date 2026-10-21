@@ -1,0 +1,7 @@
+{
+    "name": "sn-school",
+    "private": true,
+    "workspaces": [
+        "sujets/*/*/kit"
+    ]
+}

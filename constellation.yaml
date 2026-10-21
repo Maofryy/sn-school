@@ -1,0 +1,80 @@
+# Source de vérité de la carte. La FigJam en est la vue :
+# https://www.figma.com/board/vztbMUfwNHtEaPH5jpjoYv
+
+xp: # par taille
+  demi-jour: 50
+  1j: 100
+  3j: 300
+  1sem: 600
+  2sem: 1500
+
+anneaux: # seuil d'XP qui ouvre l'anneau ; seul l'XP verrouille
+  0: 0
+  1: 500
+  2: 800
+  3: 1500
+  4: 2200
+  5: 4000
+
+pairs: # pairs requis pour valider, par type
+  annexe: 1
+  sujet: 2
+  jalon: 2 # dont 1 senior
+  capstone: 2 # dont 1 senior
+
+# branche : socle | portal | itsm | integrations
+# type    : sujet | annexe | jalon | capstone
+# liens   : étoiles conseillées avant celle-ci (jamais bloquant)
+etoiles:
+  # Socle
+  - { id: F1, titre: "Premier contact", branche: socle, taille: demi-jour, type: sujet, anneau: 0, liens: [] }
+  - { id: F2, titre: "Tables & dictionnaire", branche: socle, taille: demi-jour, type: sujet, anneau: 0, liens: [F1] }
+  - { id: F3, titre: "Formulaires & UI Policies", branche: socle, taille: demi-jour, type: sujet, anneau: 0, liens: [F2] }
+  - { id: F4, titre: "Utilisateurs, groupes, rôles", branche: socle, taille: demi-jour, type: sujet, anneau: 0, liens: [F3] }
+  - { id: F5, titre: "Business Rules & GlideRecord", branche: socle, taille: 1j, type: sujet, anneau: 0, liens: [F4] }
+  - { id: F6, titre: "Client Scripts & GlideAjax", branche: socle, taille: 1j, type: sujet, anneau: 0, liens: [F5] }
+  - { id: F7, titre: "ACL 101", branche: socle, taille: demi-jour, type: sujet, anneau: 0, liens: [F6] }
+  - { id: F8, titre: "Update sets & apps scopées", branche: socle, taille: demi-jour, type: sujet, anneau: 0, liens: [F7] }
+  - { id: F9, titre: "Écrire ses tests ATF", branche: socle, taille: 1j, type: sujet, anneau: 0, liens: [F8] }
+  - { id: RPT, titre: "Reports & dashboards", branche: socle, taille: demi-jour, type: annexe, anneau: 0, liens: [F2] }
+  - { id: NOTIF, titre: "Notifications", branche: socle, taille: demi-jour, type: annexe, anneau: 0, liens: [F5] }
+  - { id: SJ, titre: "Scheduled jobs", branche: socle, taille: demi-jour, type: annexe, anneau: 0, liens: [F5] }
+  - { id: DBG, titre: "Débogage & logs", branche: socle, taille: demi-jour, type: annexe, anneau: 0, liens: [F6] }
+  - { id: S1, titre: "Mini-application scopée", branche: socle, taille: 3j, type: jalon, anneau: 1, liens: [F9] }
+
+  # Portal / Frontend
+  - { id: P1, titre: "Thème & branding portail", branche: portal, taille: demi-jour, type: sujet, anneau: 2, liens: [S1] }
+  - { id: P2, titre: "Premier widget", branche: portal, taille: 1j, type: sujet, anneau: 2, liens: [P1] }
+  - { id: P3, titre: "Widget serveur, data & options", branche: portal, taille: 1j, type: sujet, anneau: 2, liens: [P2] }
+  - { id: P4, titre: "Widget de catalogue / record producer", branche: portal, taille: 1j, type: sujet, anneau: 3, liens: [P3, T2] }
+  - { id: P5, titre: "Page de widgets qui communiquent", branche: portal, taille: 3j, type: sujet, anneau: 3, liens: [P4] }
+  - { id: A11Y, titre: "Accessibilité & i18n", branche: portal, taille: demi-jour, type: annexe, anneau: 2, liens: [P2] }
+  - { id: NG, titre: "Angular providers & directives", branche: portal, taille: 1j, type: annexe, anneau: 3, liens: [P3] }
+  - { id: UIB, titre: "Intro UI Builder", branche: portal, taille: 1j, type: annexe, anneau: 3, liens: [P5] }
+  - { id: MP, titre: "Portail métier complet", branche: portal, taille: 1sem, type: jalon, anneau: 4, liens: [P5] }
+
+  # ITSM / CMDB / CSDM
+  - { id: T1, titre: "Incident : affectation & états", branche: itsm, taille: demi-jour, type: sujet, anneau: 2, liens: [S1] }
+  - { id: T2, titre: "Catalogue de services", branche: itsm, taille: 1j, type: sujet, anneau: 2, liens: [T1, I1] }
+  - { id: T3, titre: "Change : modèles & approbations", branche: itsm, taille: 1j, type: sujet, anneau: 2, liens: [T2] }
+  - { id: T4, titre: "SLA", branche: itsm, taille: demi-jour, type: sujet, anneau: 3, liens: [T3] }
+  - { id: T5, titre: "CMDB : classes, relations, IRE", branche: itsm, taille: 3j, type: sujet, anneau: 3, liens: [T4] }
+  - { id: T6, titre: "CSDM", branche: itsm, taille: 1j, type: sujet, anneau: 3, liens: [T5] }
+  - { id: KB, titre: "Knowledge", branche: itsm, taille: demi-jour, type: annexe, anneau: 2, liens: [T1] }
+  - { id: PRB, titre: "Problem & Known errors", branche: itsm, taille: demi-jour, type: annexe, anneau: 2, liens: [T1] }
+  - { id: MT, titre: "Processus de bout en bout", branche: itsm, taille: 1sem, type: jalon, anneau: 4, liens: [T6] }
+
+  # Flow & Intégrations
+  - { id: I1, titre: "Flow Designer 101", branche: integrations, taille: demi-jour, type: sujet, anneau: 2, liens: [S1] }
+  - { id: I2, titre: "Subflows & actions custom", branche: integrations, taille: 1j, type: sujet, anneau: 2, liens: [I1] }
+  - { id: I3, titre: "Import sets & transform maps", branche: integrations, taille: 1j, type: sujet, anneau: 2, liens: [I2] }
+  - { id: I4, titre: "REST sortant", branche: integrations, taille: 1j, type: sujet, anneau: 3, liens: [I3] }
+  - { id: I5, titre: "Scripted REST API entrante", branche: integrations, taille: 3j, type: sujet, anneau: 3, liens: [I4] }
+  - { id: I6, titre: "Spoke IntegrationHub", branche: integrations, taille: 3j, type: sujet, anneau: 3, liens: [I5] }
+  - { id: EVT, titre: "Events & eventQueue", branche: integrations, taille: demi-jour, type: annexe, anneau: 2, liens: [I2] }
+  - { id: OAUTH, titre: "OAuth", branche: integrations, taille: 1j, type: annexe, anneau: 3, liens: [I4] }
+  - { id: MID, titre: "MID Server", branche: integrations, taille: demi-jour, type: annexe, anneau: 3, liens: [I4] }
+  - { id: MI, titre: "Intégration bidirectionnelle", branche: integrations, taille: 1sem, type: jalon, anneau: 4, liens: [I6] }
+
+  # Capstone
+  - { id: CAP, titre: "Portail + catalogue + flow + intégration", branche: socle, taille: 2sem, type: capstone, anneau: 5, liens: [MP, MT, MI] }
