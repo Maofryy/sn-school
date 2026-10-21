@@ -1,6 +1,9 @@
 {
     "name": "sn-school",
     "private": true,
+    "scripts": {
+        "deployer": "node scripts/deployer.mjs"
+    },
     "workspaces": [
         "sujets/*/*/kit"
     ]

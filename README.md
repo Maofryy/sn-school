@@ -15,10 +15,11 @@ Prérequis : Node 20+ et une PDI (developer.servicenow.com).
 ```bash
 npm install                                   # une fois, à la racine du repo
 npx now-sdk auth --add https://devXXXXX.service-now.com --type basic --alias ma-pdi
-npx now-sdk auth --use ma-pdi
-cd sujets/socle/F5-business-rules/kit         # le kit du sujet choisi
-npm run deploy                                # installe l'app sur votre PDI
+npm run deployer -- F5 --auth ma-pdi          # installe le kit du sujet F5 sur votre PDI
 ```
+
+Le script adapte le scope de l'app au préfixe vendeur de votre PDI. Ne lancez pas `npm run deploy` directement
+dans `kit/` : votre PDI refuserait une app d'un autre préfixe.
 
 Sur la PDI, passez à `true` les propriétés système `sn_atf.runner.enabled` et `sn_atf.schedule.enabled`.
 
@@ -26,9 +27,9 @@ Sur la PDI, passez à `true` les propriétés système `sn_atf.runner.enabled` e
 
 1. Lisez `sujet.md`, installez le kit.
 2. Travaillez sur votre PDI jusqu'à ce que la suite ATF publique soit verte :
-   `npx now-sdk cicd testsuite run --test-suite-name "<ID> – Public"` depuis le dossier `kit/`.
-3. Rendez l'export de votre app (update set ou Studio).
-4. La correction complète tourne sur l'instance de correction. Vous recevez son rapport : tests bloquants et points à discuter.
+   `npx now-sdk cicd testsuite run --test-suite-name "<ID> – Public" --auth ma-pdi` depuis le dossier `kit/`.
+3. Prévenez votre correcteur et créez-lui un compte `admin` temporaire sur votre PDI.
+4. Il y installe la suite de correction et la lance. Vous recevez le rapport complet : tests bloquants et points à discuter.
 5. Revue par les pairs, rapport à l'appui. Leur validation crédite l'XP du sujet.
 
 Seul l'XP verrouille la progression : les liens de la carte sont des conseils.

@@ -17,11 +17,10 @@ Prérequis : Node 20+ et une PDI (developer.servicenow.com).
    ```bash
    npm install                                   # une fois pour tout le repo
    npx now-sdk auth --add https://devXXXXX.service-now.com --type basic --alias ma-pdi
-   npx now-sdk auth --use ma-pdi                 # si vous avez déjà d'autres instances
-   cd sujets/socle/F5-business-rules/kit
-   npm run deploy
-   npm run deploy                                # 1re installation seulement : attribue le rôle de l'app aux utilisateurs de test
+   npm run deployer -- F5 --auth ma-pdi
    ```
+
+   Le script adapte le scope de l'app au préfixe vendeur de votre PDI : l'app s'installe en `x_<votre préfixe>_f5`.
 
 2. Sur votre PDI, passez à `true` les propriétés système `sn_atf.runner.enabled` et `sn_atf.schedule.enabled`
    (exécution des tests ATF) :
@@ -30,15 +29,16 @@ Prérequis : Node 20+ et une PDI (developer.servicenow.com).
 3. Vérifiez que tout est en place : la suite publique doit tourner et être **rouge** (rien n'est encore codé).
 
    ```bash
-   npx now-sdk cicd testsuite run --test-suite-name "F5 – Public"
+   cd sujets/socle/F5-business-rules/kit
+   npx now-sdk cicd testsuite run --test-suite-name "F5 – Public" --auth ma-pdi
    ```
 
 ## Ce qui est fourni (kit)
 
-- L'app scopée « SN School F5 – Prêt de matériel » (scope `x_1606601_f5`).
+- L'app scopée « SN School F5 – Prêt de matériel » (scope `x_<votre préfixe>_f5`, noté `x_…_f5` ci-dessous).
 - La table **Matériel** : `name`, `category`, `stock_total` (entier), `max_loan_days` (entier ; vide ou 0 = sans limite), `reserved_quantity` (entier, lecture seule).
 - La table **Demande de prêt** : `number`, `requested_for` (→ sys_user, par défaut l'utilisateur courant), `item` (→ Matériel), `quantity`, `start_date`, `end_date`, `state` (draft, submitted, approved, rejected, returned, cancelled), `approver` (→ sys_user), `assignment_group` (→ sys_user_group).
-- La propriété système `x_1606601_f5.default_group` : nom du groupe « Gestionnaires matériel ».
+- La propriété système `x_…_f5.default_group` : nom du groupe « Gestionnaires matériel ».
 - Des utilisateurs de test (avec et sans manager), 3 matériels, quelques demandes.
 - La suite ATF « F5 – Public », rouge au départ.
 
@@ -56,7 +56,7 @@ d'erreur clair si :
 - la durée (en jours, bornes incluses) dépasse le `max_loan_days` du matériel, quand il est défini.
 
 **E3 — Désigner l'approbateur.** À la création : `approver` = manager de `requested_for`.
-Sans manager : `assignment_group` = groupe nommé dans la propriété `x_1606601_f5.default_group`.
+Sans manager : `assignment_group` = groupe nommé dans la propriété `x_…_f5.default_group`.
 
 **E4 — Contrôler le stock à l'approbation.** Quand une demande passe à `approved`, refusez si sa quantité
 plus la quantité déjà réservée sur la période dépasse `stock_total`. Utilisez E1.
@@ -74,13 +74,15 @@ recalculez `reserved_quantity` du matériel : somme des quantités des demandes 
 
 ## Vous auto-évaluer
 
-Lancez la suite « F5 – Public » (depuis ATF, ou `npx now-sdk cicd testsuite run --test-suite-name "F5 – Public"`) : tout doit être vert.
+Lancez la suite « F5 – Public » (depuis ATF, ou avec la commande de l'étape 3 ci-dessus) : tout doit être vert.
 Le vert public est nécessaire, pas suffisant : la correction va plus loin
 (cas limites, autres utilisateurs, volume, bonnes pratiques).
 
 ## Rendu
 
-L'export de l'app (update set ou Studio), plus 3 lignes qui expliquent vos choix de types de Business Rules.
+Prévenez votre correcteur, avec 3 lignes qui expliquent vos choix de types de Business Rules.
+La correction se passe sur votre PDI : créez au correcteur un compte avec le rôle `admin` pour la durée de la
+correction, puis supprimez-le. Il y installe la suite de correction et vous remet le rapport complet.
 
 ## Pour aller plus loin (facultatif)
 
